@@ -1,0 +1,9 @@
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+/.idea
+**/.DS_Store
+Thumbs.db
+/node_modules

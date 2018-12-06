@@ -22,7 +22,7 @@ updateGame = ()=>{
 	if(elapsed > fpsInterval){
 		then = now - (elapsed % fpsInterval);
 		areadeJuego.clear();
-		areadeJuego.update();
+		areadeJuego.update(player.currentAction);
 		player.update();
 	}
 };
