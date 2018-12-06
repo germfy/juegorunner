@@ -1,35 +1,32 @@
-let areadeJuego = {
-	canvas: document.createElement('canvas'),
-	start: function()  {
-		//console.log(this);
+function AreadeJuego(){
+	this.canvas = document.createElement('canvas');
+	this.start = ()=>{
 		this.canvas.width = 420;
 		this.canvas.height = 420;
 		this.context = this.canvas.getContext('2d');
 		document.body.appendChild(this.canvas);
-	},
-	frame: 0,
-	clear: function()  {
+	};
+	this.frame = 0;
+	this.clear = ()=>{
 		this.context.clearRect(0,0, this.canvas.width, this.canvas.height);
-	},
-	stop: function(){
-		window.cancelAnimationFrame(this.animationId);
-	},
-	update: function() {
-		this.clear();
-		//console.log(this.frame);
+	};
+	this.stop = ()=>{
+		stopGame();
+	};
+	this.update = ()=>{
+
 		this.frame++;
+	};
+}
 
-	}
-};
-
-let player = {
-	walkFrames: [],
-	jumpFrames: [],
-	idleFrame: [],
-	currentFrame: 0,
-	maxFrame: 0,
-	currentAction: 0,
-	setup: function() {
+function Player(){
+	this.walkFrames = []
+	this.jumpFrames = []
+	this.idleFrame = []
+	this.currentFrame = 0;
+	this.maxFrame = 0;
+	this.currentAction = 0;
+	this.setup = ()=>{
 		for (let i = 0; i < 5; i++){
 			this.walkFrames.push(new Image());
 			this.walkFrames[i].src = `images/running/frame-${i+1}.png`
@@ -41,28 +38,44 @@ let player = {
 		this.jumpFrames.push(new Image());
 		this.jumpFrames[1].src = 'images/jump_fall/jump_fall.png';
 		this.jumpFrames[1].addEventListener('load', this.start);
+
 		for( let i = 0; i < 8; i++) {
 			this.idleFrame.push(new Image());
 			this.idleFrame[i].src = `images/idle/frame-${i + 1}.png`
 			this.idleFrame[i].addEventListener('load', this.start);
 		}
-	},
-	start:()=>{
-		console.log("todas las imagenes cargadas");
+	}
+	this.start = ()=>{
 		player.currentAction = 1;
 		player.maxFrame = 8;
 		window.requestAnimationFrame(updateGame);
-	},
-	walk: () =>{
-
-	},
-	update: function() {
+	}
+	this.walk = ()=>{
+		this.currentAction = 2;
+		this.maxFrame = 1;
+	}
+	this.update = ()=>{
+		let ctx = areadeJuego.context;
+		this.currentFrame++;
+		if(this.currentFrame === this.maxFrame){
+			this.currentFrame = 0;
+		}
 		switch(this.currentAction) {
 			case 1:
-				let ctx = areadeJuego.context;
-				ctx.drawImage(this.idleFrame[this.currentFrame],100, 100, 100, 100);
+				//let ctx = areadeJuego.context;
+				try{
+					ctx.drawImage(this.idleFrame[this.currentFrame],100, 100, 100, 100);
+				}catch(e){
+					console.log(this.currentFrame);
+					this.currentFrame = 0;
+				}
+
 				break;
+			case 2:
+				console.log(typeof this.staticFrame);
+				ctx.drawImage(this.staticFrame, 100, 100, 100, 100);
+				break;
+
 		}
-		(this.currentFrame == this.maxFrame) ? this.currentFrame = 0 : this.currentFrame++
-	},
+	}
 }
